@@ -38,8 +38,7 @@ class AndroidCameraCameraX extends CameraPlatform {
 
   // Instances used to configure and bind use cases to ProcessCameraProvider instance:
 
-  /// The [Preview] instance that can be instantiated adn configured to present
-  /// a live camera preview.
+  /// The [Preview] instance that can be configured to present a live camera preview.
   @visibleForTesting
   Preview? preview;
 
@@ -137,7 +136,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
   }) async {
-    // Must obtatin proper permissions before attempting to access a camera.
+    // Must obtain proper permissions before attempting to access a camera.
     await requestCameraPermissions(enableAudio);
 
     // Save CameraSelector that matches cameraDescription.
