@@ -296,6 +296,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     // TODO(camsim99): Add support for flash mode configuration.
     // https://github.com/flutter/flutter/issues/120715
     imageCapture ??= createImageCapture(null, targetResolution);
+    // TODO(camsim99): Bind image capture to lifecycle with previw if it is bound.
 
     String picturePath = await imageCapture!.takePicture();
     return XFile(picturePath);
