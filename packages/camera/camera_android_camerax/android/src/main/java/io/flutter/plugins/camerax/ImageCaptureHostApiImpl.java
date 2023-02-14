@@ -4,6 +4,9 @@
 
 package io.flutter.plugins.camerax;
 
+import android.content.Context;
+import android.util.Size;
+import androidx.camera.core.ImageCaptureException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -12,6 +15,7 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.camerax.GeneratedCameraXLibrary.ImageCaptureHostApi;
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.Executors;
 
 public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   private final BinaryMessenger binaryMessenger;
@@ -38,13 +42,13 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   public void create(
       @NonNull Long identifier,
       @Nullable Long flashMode,
-      @Nullable ResolutionInfo targetResolution) {
+      @Nullable GeneratedCameraXLibrary.ResolutionInfo targetResolution) {
     ImageCapture.Builder imageCaptureBuilder = cameraXProxy.createImageCaptureBuilder();
     if (flashMode != null) {
       // This sets the requested flash mode, but may fail silently.
-      imageCaptureBuilder.setFlashMode(flashMode);
+      imageCaptureBuilder.setFlashMode(flashMode.intValue());
     }
-    if (targetResolution != nul) {
+    if (targetResolution != null) {
       imageCaptureBuilder.setTargetResolution(
           new Size(
               targetResolution.getWidth().intValue(), targetResolution.getHeight().intValue()));
@@ -63,17 +67,17 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   @Override
   public void setFlashMode(@NonNull Long identifier, @NonNull Long flashMode) {
     ImageCapture imageCapture = (ImageCapture) Objects.requireNonNull(instanceManager.getInstance(identifier));
-    imageCapture.setFlashMode(flashMode);
+    imageCapture.setFlashMode(flashMode.intValue());
   }
 
   /** Captures a still image and uses the result to return its absolute path in memory. */
   @Override
-  public void takePicture(@NonNull Long identifier, @NonNull Result<String> result) {
+  public void takePicture(@NonNull Long identifier, @NonNull GeneratedCameraXLibrary.Result<String>result) {
     ImageCapture imageCapture = (ImageCapture) Objects.requireNonNull(instanceManager.getInstance(identifier));
     final File outputDir = context.getCacheDir();
     File temporaryCaptureFile = File.createTempFile("CAP", ".jpg", outputDir);
     ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(temporaryCaptureFile).build();
-    ImageCapture.OnImageSavedCallback onImageSavedCallback = createOnImageSavedCallback(file, result);
+    ImageCapture.OnImageSavedCallback onImageSavedCallback = createOnImageSavedCallback(temporaryCaptureFile, result);
 
     imageCapture.takePicture(
         outputFileOptions,
@@ -83,7 +87,7 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   }
 
   /** Creates a callback used when saving a captured image. */
-  private ImageCapture.OnImageSavedCallback createOnImageSavedCallback(@NonNull File file, @NonNull Result<String> result) {
+  private ImageCapture.OnImageSavedCallback createOnImageSavedCallback(@NonNull File file, @NonNull GeneratedCameraXLibrary.Result<String> result) {
     return new ImageCapture.OnImageSavedCallback() {
         @Override
         public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
@@ -98,14 +102,14 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
           // Send error.
           SystemServicesFlutterApiImpl systemServicesFlutterApi =
             cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
-          systemServicesFlutterApi.sendCameraError(getOnImageSavedExceptionDescription(exception, reply -> {}));
+          systemServicesFlutterApi.sendCameraError(getOnImageSavedExceptionDescription(exception), reply -> {});
         }
-    }
+    };
   }
 
   /** Gets exception description for a failure with saving a captured image. */
-  private getOnImageSavedExceptionDescription(@NonNull ImageCaptureException exception) {
-    return exception.getImageCaptureError() + ": " + exception.message;
+  private String getOnImageSavedExceptionDescription(@NonNull ImageCaptureException exception) {
+    return exception.getImageCaptureError() + ": " + exception.getMessage();
   }
 
 }
