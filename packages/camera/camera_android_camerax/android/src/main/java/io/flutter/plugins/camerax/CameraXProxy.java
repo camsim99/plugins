@@ -9,6 +9,7 @@ import android.graphics.SurfaceTexture;
 import android.view.Surface;
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
 import androidx.camera.core.Preview;
 import io.flutter.plugin.common.BinaryMessenger;
 
@@ -47,5 +48,9 @@ public class CameraXProxy {
   public SystemServicesFlutterApiImpl createSystemServicesFlutterApiImpl(
       @NonNull BinaryMessenger binaryMessenger) {
     return new SystemServicesFlutterApiImpl(binaryMessenger);
+  }
+
+  public ImageCapture.Builder createImageCaptureBuilder() {
+    return new ImageCapture.Builder();
   }
 }
