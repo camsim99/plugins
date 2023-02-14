@@ -4,25 +4,33 @@
 
 package io.flutter.plugins.camerax;
 
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.camera.core.ImageCapture;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.camerax.GeneratedCameraXLibrary.ImageCaptureHostApi;
+import java.io.File;
+import java.util.Objects;
 
 public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   private final BinaryMessenger binaryMessenger;
   private final InstanceManager instanceManager;
 
+  private Context context;
+
   @VisibleForTesting public CameraXProxy cameraXProxy = new CameraXProxy();
 
   public ImageCaptureHostApiImpl(
-      @NonNull BinaryMessenger binaryMessenger, @NonNull InstanceManager instanceManager) {
+      @NonNull BinaryMessenger binaryMessenger, @NonNull InstanceManager instanceManager, @NonNull Context context) {
     this.binaryMessenger = binaryMessenger;
     this.instanceManager = instanceManager;
+    this.context = context;
+  }
+
+  /** Sets the context that the {@code ImageCapture} will use to find a location to save a captured image. */
+  public void setContext(Context context) {
+    this.context = context;
   }
 
   /** Creates a {@link ImageCapture} with the requested flash mode and target resolution if specified. */
@@ -61,8 +69,43 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   /** Captures a still image and uses the result to return its absolute path in memory. */
   @Override
   public void takePicture(@NonNull Long identifier, @NonNull Result<String> result) {
+    ImageCapture imageCapture = (ImageCapture) Objects.requireNonNull(instanceManager.getInstance(identifier));
+    final File outputDir = context.getCacheDir();
+    File temporaryCaptureFile = File.createTempFile("CAP", ".jpg", outputDir);
+    ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(temporaryCaptureFile).build();
+    ImageCapture.OnImageSavedCallback onImageSavedCallback = createOnImageSavedCallback(file, result);
 
+    imageCapture.takePicture(
+        outputFileOptions,
+        Executors.newSingleThreadExecutor(),
+        onImageSavedCallback
+    );
   }
 
+  /** Creates a callback used when saving a captured image. */
+  private ImageCapture.OnImageSavedCallback createOnImageSavedCallback(@NonNull File file, @NonNull Result<String> result) {
+    return new ImageCapture.OnImageSavedCallback() {
+        @Override
+        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+          result.success(file.getAbsolutePath());
+        }
+
+        @Override
+        public void onError(@NonNull ImageCaptureException exception) {
+          // Send null path because image was not saved.
+          result.success(null);
+
+          // Send error.
+          SystemServicesFlutterApiImpl systemServicesFlutterApi =
+            cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
+          systemServicesFlutterApi.sendCameraError(getOnImageSavedExceptionDescription(exception, reply -> {}));
+        }
+    }
+  }
+
+  /** Gets exception description for a failure with saving a captured image. */
+  private getOnImageSavedExceptionDescription(@NonNull ImageCaptureException exception) {
+    return exception.getImageCaptureError() + ": " + exception.message;
+  }
 
 }

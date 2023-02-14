@@ -50,6 +50,10 @@ class AndroidCameraCameraX extends CameraPlatform {
 
   bool _previewIsPaused = false;
 
+  /// The [ImageCapture] instance that can be configured to capture a still image.
+  @visibleForTesting
+  ImageCapture? imageCapture;
+
   // Instances used for camera configuration:
 
   /// The [CameraSelector] used to configure the [processCameraProvider] to use
@@ -275,6 +279,14 @@ class AndroidCameraCameraX extends CameraPlatform {
               return Texture(textureId: cameraId);
           }
         });
+  }
+
+  /// Captures an image and returns the file where it was saved.
+  ///
+  /// [cameraId] is not used.
+  @override
+  Future<XFile> takePicture(int cameraId) {
+    
   }
 
   // Methods for binding UseCases to the lifecycle of the camera controlled
