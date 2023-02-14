@@ -60,6 +60,10 @@ class AndroidCameraCameraX extends CameraPlatform {
   @visibleForTesting
   CameraSelector? cameraSelector;
 
+  /// The resolution preset used to create a camera that should be used for
+  /// capturing still images and recording video.
+  ResolutionPreset? _resolutionPreset;
+
   /// The controller we need to broadcast the different camera events.
   ///
   /// It is a `broadcast` because multiple controllers will connect to
@@ -153,6 +157,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     processCameraProvider ??= await getProcessCameraProviderInstance();
 
     // Configure Preview instance and bind to ProcessCameraProvider.
+    _resolutionPreset = resolutionPreset;
     final int targetRotation =
         _getTargetRotation(cameraDescription.sensorOrientation);
     final ResolutionInfo? targetResolution =
@@ -285,7 +290,14 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// [cameraId] is not used.
   @override
   Future<XFile> takePicture(int cameraId) {
-    
+    final ResolutionInfo? targetResolution =
+      _getTargetResolutionForImageCapture(_resolutionPreset);
+    // TODO(camsim99): Add support for flash mode configuration.
+    // https://github.com/flutter/flutter/issues/120715
+    imageCapture ??= createImageCapture(null, targetResolution);
+
+    String picturePath = await imageCapture.takePicture();
+    return XFile(picturePath);
   }
 
   // Methods for binding UseCases to the lifecycle of the camera controlled
@@ -361,6 +373,13 @@ class AndroidCameraCameraX extends CameraPlatform {
     return null;
   }
 
+  /// Returns [ResolutionInfo] that maps to the specified resolution preset for
+  /// image capture.
+  ResolutionInfo? _getTargetResolutionForImageCapture(ResolutionPreset? resolution) {
+    // TODO(camsim99): Implement resolution configuration.
+    // https://github.com/flutter/flutter/issues/120462
+  }
+
   // Methods for calls that need to be tested:
 
   /// Requests camera permissions.
@@ -405,5 +424,13 @@ class AndroidCameraCameraX extends CameraPlatform {
   Preview createPreview(int targetRotation, ResolutionInfo? targetResolution) {
     return Preview(
         targetRotation: targetRotation, targetResolution: targetResolution);
+  }
+
+  /// Returns an [ImageCapture] configured with specified flash mode and
+  /// resolution.
+  @visibleForTesting
+  ImageCapture createImageCapture(int flashMode, int targetResolution) {
+    return ImageCapture(
+      flashMode: flashMode, targetResolution: targetResolution);
   }
 }
