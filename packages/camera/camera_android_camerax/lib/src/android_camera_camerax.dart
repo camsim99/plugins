@@ -12,6 +12,7 @@ import 'camera.dart';
 import 'camera_info.dart';
 import 'camera_selector.dart';
 import 'camerax_library.g.dart';
+import 'image_capture.dart';
 import 'preview.dart';
 import 'process_camera_provider.dart';
 import 'surface.dart';
@@ -289,14 +290,14 @@ class AndroidCameraCameraX extends CameraPlatform {
   ///
   /// [cameraId] is not used.
   @override
-  Future<XFile> takePicture(int cameraId) {
+  Future<XFile> takePicture(int cameraId) async {
     final ResolutionInfo? targetResolution =
-      _getTargetResolutionForImageCapture(_resolutionPreset);
+        _getTargetResolutionForImageCapture(_resolutionPreset);
     // TODO(camsim99): Add support for flash mode configuration.
     // https://github.com/flutter/flutter/issues/120715
     imageCapture ??= createImageCapture(null, targetResolution);
 
-    String picturePath = await imageCapture.takePicture();
+    String picturePath = await imageCapture!.takePicture();
     return XFile(picturePath);
   }
 
@@ -375,7 +376,8 @@ class AndroidCameraCameraX extends CameraPlatform {
 
   /// Returns [ResolutionInfo] that maps to the specified resolution preset for
   /// image capture.
-  ResolutionInfo? _getTargetResolutionForImageCapture(ResolutionPreset? resolution) {
+  ResolutionInfo? _getTargetResolutionForImageCapture(
+      ResolutionPreset? resolution) {
     // TODO(camsim99): Implement resolution configuration.
     // https://github.com/flutter/flutter/issues/120462
   }
@@ -429,8 +431,9 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// Returns an [ImageCapture] configured with specified flash mode and
   /// resolution.
   @visibleForTesting
-  ImageCapture createImageCapture(int flashMode, int targetResolution) {
+  ImageCapture createImageCapture(
+      int? flashMode, ResolutionInfo? targetResolution) {
     return ImageCapture(
-      flashMode: flashMode, targetResolution: targetResolution);
+        flashMode: flashMode, targetResolution: targetResolution);
   }
 }
