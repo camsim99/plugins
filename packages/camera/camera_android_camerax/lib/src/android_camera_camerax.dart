@@ -285,19 +285,19 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// [cameraId] is not used.
   @override
   Future<XFile> takePicture(int cameraId) async {
-    assert(
-      processCameraProvider != null,
-      'Camera must be created and initialized before taking a picture.',
-    );
+    assert(processCameraProvider != null);
+    assert(cameraSelector != null);
 
     final ResolutionInfo? targetResolution =
         _getTargetResolutionForImageCapture(_resolutionPreset);
     // TODO(camsim99): Add support for flash mode configuration.
     // https://github.com/flutter/flutter/issues/120715
-    imageCapture ??= ImageCapture(flashMode: null, targetResolution: targetResolution);
-    camera = processCameraProvider.bindToLifecycle(imageCapture!, <UseCase>[imageCapture!]);
+    imageCapture ??=
+        ImageCapture(flashMode: null, targetResolution: targetResolution);
+    camera = await processCameraProvider!
+        .bindToLifecycle(cameraSelector!, <UseCase>[imageCapture!]);
     String picturePath = await imageCapture!.takePicture();
-    processCameraProvider.unbind(<UseCase>[imageCapture!]);
+    processCameraProvider!.unbind(<UseCase>[imageCapture!]);
 
     return XFile(picturePath);
   }
@@ -418,5 +418,14 @@ class AndroidCameraCameraX extends CameraPlatform {
   Preview createPreview(int targetRotation, ResolutionInfo? targetResolution) {
     return Preview(
         targetRotation: targetRotation, targetResolution: targetResolution);
+  }
+
+  /// Returns an [ImageCapture] configured with specified flash mode and
+  /// target resolution.
+  @visibleForTesting
+  ImageCapture createImageCapture(
+      int? flashMode, ResolutionInfo? targetResolution) {
+    return ImageCapture(
+        flashMode: flashMode, targetResolution: targetResolution);
   }
 }
