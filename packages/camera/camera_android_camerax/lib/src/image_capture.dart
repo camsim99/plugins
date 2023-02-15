@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:camera_platform_interface/camera_platform_interface.dart'
+    show CameraException;
 import 'package:flutter/services.dart' show BinaryMessenger;
 
 import 'camerax_library.g.dart';
@@ -51,17 +53,17 @@ class ImageCapture extends UseCase {
   /// Constant for automatic flash mode.
   ///
   /// See https://developer.android.com/reference/androidx/camera/core/ImageCapture#FLASH_MODE_AUTO().
-  static const int FLASH_MODE_AUTO = 0;
+  static const int flashModeAuto = 0;
 
   /// Constant for on flash mode.
   ///
   /// See https://developer.android.com/reference/androidx/camera/core/ImageCapture#FLASH_MODE_ON().
-  static const int FLASH_MODE_ON = 1;
+  static const int flashModeOn = 1;
 
   /// Constant for no flash mode.
   ///
   /// See https://developer.android.com/reference/androidx/camera/core/ImageCapture#FLASH_MODE_OFF().
-  static const int FLASH_MODE_OFF = 2;
+  static const int flashModeOff = 2;
 
   /// Sets the flash mode to use for image capture.
   void setFlashMode(int newFlashMode) {
@@ -72,8 +74,7 @@ class ImageCapture extends UseCase {
   /// Takes a picture and returns the absolute path of where the capture image
   /// was saved.
   Future<String> takePicture() async {
-    String picturePath = await _api.takePictureFromInstance(this);
-    return picturePath;
+    return await _api.takePictureFromInstance(this);
   }
 }
 
@@ -126,6 +127,13 @@ class ImageCaptureHostApiImpl extends ImageCaptureHostApi {
         'No ImageCapture has the identifer of that requested to get the resolution information for.');
 
     String picturePath = await takePicture(identifier!);
+    if (picturePath == '') {
+      throw CameraException(
+        'TAKE_PICTURE_FAILED',
+        'Capturing the image failed or the picture failed to save.',
+      );
+    }
+    
     return picturePath;
   }
 }
