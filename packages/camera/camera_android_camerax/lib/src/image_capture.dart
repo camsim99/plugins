@@ -133,7 +133,7 @@ class ImageCaptureHostApiImpl extends ImageCaptureHostApi {
         'Capturing the image failed or the picture failed to save.',
       );
     }
-    
+
     return picturePath;
   }
 }

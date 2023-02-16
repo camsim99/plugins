@@ -23,9 +23,9 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   private final InstanceManager instanceManager;
 
   private Context context;
+  private SystemServicesFlutterApiImpl systemServicesFlutterApiImpl;
 
   @VisibleForTesting public CameraXProxy cameraXProxy = new CameraXProxy();
-  @VisibleForTesting public SystemServicesFlutterApiImpl systemServicesFlutterApiImpl;
 
   public ImageCaptureHostApiImpl(
       @NonNull BinaryMessenger binaryMessenger,
@@ -34,8 +34,6 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
     this.binaryMessenger = binaryMessenger;
     this.instanceManager = instanceManager;
     this.context = context;
-    this.systemServicesFlutterApiImpl =
-        cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
   }
 
   /**
@@ -69,13 +67,7 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
     instanceManager.addDartCreatedInstance(imageCapture, identifier);
   }
 
-  /**
-   * Sets the flash mode of the {@link ImageCapture} instance with the specified identifier.
-   *
-   * <p>Will have no effect if there is no flash unit. See
-   * https://developer.android.com/reference/androidx/camera/core/ImageCapture#setFlashMode(int) for
-   * further details.
-   */
+  /** Sets the flash mode of the {@link ImageCapture} instance with the specified identifier. */
   @Override
   public void setFlashMode(@NonNull Long identifier, @NonNull Long flashMode) {
     ImageCapture imageCapture =
@@ -94,18 +86,21 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
     try {
       temporaryCaptureFile = File.createTempFile("CAP", ".jpg", outputDir);
     } catch (IOException | SecurityException e) {
-      // Send empty path because image was not saved.
-      // TODO(camsim99): Consider normalizing error messages.
+      // Send empty path because file could not be created to save image.
       result.success("");
 
       // Send error.
+      if (systemServicesFlutterApiImpl == null) {
+        systemServicesFlutterApiImpl =
+            cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
+      }
       systemServicesFlutterApiImpl.sendCameraError(
           "Cannot create file to save captured image: " + e.getMessage(), reply -> {});
       return;
     }
 
     ImageCapture.OutputFileOptions outputFileOptions =
-        new ImageCapture.OutputFileOptions.Builder(temporaryCaptureFile).build();
+        cameraXProxy.createImageCaptureOutputFileOptions(temporaryCaptureFile);
     ImageCapture.OnImageSavedCallback onImageSavedCallback =
         createOnImageSavedCallback(temporaryCaptureFile, result);
 
@@ -114,7 +109,8 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
   }
 
   /** Creates a callback used when saving a captured image. */
-  private ImageCapture.OnImageSavedCallback createOnImageSavedCallback(
+  @VisibleForTesting
+  public ImageCapture.OnImageSavedCallback createOnImageSavedCallback(
       @NonNull File file, @NonNull GeneratedCameraXLibrary.Result<String> result) {
     return new ImageCapture.OnImageSavedCallback() {
       @Override
@@ -128,6 +124,10 @@ public class ImageCaptureHostApiImpl implements ImageCaptureHostApi {
         result.success("");
 
         // Send error.
+        if (systemServicesFlutterApiImpl == null) {
+          systemServicesFlutterApiImpl =
+              cameraXProxy.createSystemServicesFlutterApiImpl(binaryMessenger);
+        }
         systemServicesFlutterApiImpl.sendCameraError(
             getOnImageSavedExceptionDescription(exception), reply -> {});
       }

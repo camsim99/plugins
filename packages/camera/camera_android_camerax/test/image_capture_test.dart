@@ -61,8 +61,7 @@ void main() {
       expect(capturedResolutionInfo.height, equals(targetResolutionHeight));
     });
 
-    test(
-        'setFlashMode makes call to set flash mode for ImageCapture instance',
+    test('setFlashMode makes call to set flash mode for ImageCapture instance',
         () async {
       final MockTestImageCaptureHostApi mockApi = MockTestImageCaptureHostApi();
       TestImageCaptureHostApi.setup(mockApi);
@@ -82,13 +81,11 @@ void main() {
 
       imageCapture.setFlashMode(flashMode);
 
-      verify(
-          mockApi.setFlashMode(instanceManager.getIdentifier(imageCapture), flashMode));
+      verify(mockApi.setFlashMode(
+          instanceManager.getIdentifier(imageCapture), flashMode));
     });
 
-    test(
-        'takePicture makes call to capture still image',
-        () async {
+    test('takePicture makes call to capture still image', () async {
       final MockTestImageCaptureHostApi mockApi = MockTestImageCaptureHostApi();
       TestImageCaptureHostApi.setup(mockApi);
 
@@ -106,10 +103,9 @@ void main() {
       );
 
       when(mockApi.takePicture(instanceManager.getIdentifier(imageCapture)))
-            .thenAnswer((_) async => expectedPicturePath);
+          .thenAnswer((_) async => expectedPicturePath);
       expect(await imageCapture.takePicture(), equals(expectedPicturePath));
       verify(mockApi.takePicture(instanceManager.getIdentifier(imageCapture)));
-     }
-    );
+    });
   });
 }
