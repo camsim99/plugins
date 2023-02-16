@@ -19,7 +19,6 @@ import android.content.Context;
 import android.util.Size;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
-import androidx.test.core.app.ApplicationProvider;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.camerax.GeneratedCameraXLibrary.SystemServicesFlutterApi.Reply;
 import java.io.File;
@@ -50,7 +49,7 @@ public class ImageCaptureTest {
   private MockedStatic<File> mockedStaticFile;
 
   @Before
-  public void setUp() throws Exception{
+  public void setUp() throws Exception {
     testInstanceManager = spy(InstanceManager.open(identifier -> {}));
     context = mock(Context.class);
     mockedStaticFile = mockStatic(File.class);
@@ -90,8 +89,7 @@ public class ImageCaptureTest {
     assertEquals(sizeCaptor.getValue().getWidth(), targetResolutionWidth);
     assertEquals(sizeCaptor.getValue().getHeight(), targetResolutionHeight);
     verify(mockImageCaptureBuilder).build();
-    verify(testInstanceManager)
-        .addDartCreatedInstance(mockImageCapture, imageCaptureIdentifier);
+    verify(testInstanceManager).addDartCreatedInstance(mockImageCapture, imageCaptureIdentifier);
   }
 
   @Test
@@ -131,7 +129,8 @@ public class ImageCaptureTest {
         .thenReturn(mockFile);
     when(mockCameraXProxy.createImageCaptureOutputFileOptions(mockFile))
         .thenReturn(mockOutputFileOptions);
-    when(imageCaptureHostApiImpl.createOnImageSavedCallback(mockFile, mockResult)).thenReturn(mockOnImageSavedCallback);
+    when(imageCaptureHostApiImpl.createOnImageSavedCallback(mockFile, mockResult))
+        .thenReturn(mockOnImageSavedCallback);
 
     imageCaptureHostApiImpl.takePicture(imageCaptureIdentifier, mockResult);
 
