@@ -1,0 +1,437 @@
+{
+  "classes": [
+    {
+      "name": "ProcessCameraProvider",
+      "private": false,
+      "methods": [
+        {
+          "name": "getInstance",
+          "returnType": {
+            "name": "Future",
+            "nullable": false,
+            "typeArguments": [
+              {
+                "name": "ProcessCameraProvider",
+                "nullable": false,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": true,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              }
+            ],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": false,
+            "isClass": true,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": false,
+          "private": false,
+          "static": true,
+          "parameters": [
+            {
+              "name": "binaryMessenger",
+              "type": {
+                "name": "BinaryMessenger",
+                "nullable": true,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": true,
+              "customValues": {}
+            },
+            {
+              "name": "instanceManager",
+              "type": {
+                "name": "InstanceManager",
+                "nullable": true,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": true,
+              "customValues": {}
+            }
+          ],
+          "customValues": {}
+        },
+        {
+          "name": "getAvailableCameraInfos",
+          "returnType": {
+            "name": "Future",
+            "nullable": false,
+            "typeArguments": [
+              {
+                "name": "List",
+                "nullable": false,
+                "typeArguments": [
+                  {
+                    "name": "CameraInfo",
+                    "nullable": false,
+                    "typeArguments": [],
+                    "functionParameters": [],
+                    "functionReturnType": null,
+                    "isVoid": false,
+                    "isClass": true,
+                    "isFunction": false,
+                    "isEnum": false,
+                    "isSimpleClass": false,
+                    "isUnknownOrUnsupportedType": false,
+                    "customValues": {}
+                  }
+                ],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              }
+            ],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": false,
+            "isClass": true,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": false,
+          "private": false,
+          "static": false,
+          "parameters": [],
+          "customValues": {}
+        },
+        {
+          "name": "bindToLifecycle",
+          "returnType": {
+            "name": "Future",
+            "nullable": false,
+            "typeArguments": [
+              {
+                "name": "Camera",
+                "nullable": false,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              }
+            ],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": false,
+            "isClass": true,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": false,
+          "private": false,
+          "static": false,
+          "parameters": [
+            {
+              "name": "cameraSelector",
+              "type": {
+                "name": "CameraSelector",
+                "nullable": false,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": false,
+              "customValues": {}
+            },
+            {
+              "name": "useCases",
+              "type": {
+                "name": "List",
+                "nullable": false,
+                "typeArguments": [
+                  {
+                    "name": "UseCase",
+                    "nullable": false,
+                    "typeArguments": [],
+                    "functionParameters": [],
+                    "functionReturnType": null,
+                    "isVoid": false,
+                    "isClass": true,
+                    "isFunction": false,
+                    "isEnum": false,
+                    "isSimpleClass": false,
+                    "isUnknownOrUnsupportedType": false,
+                    "customValues": {}
+                  }
+                ],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": false,
+              "customValues": {}
+            }
+          ],
+          "customValues": {}
+        },
+        {
+          "name": "isBound",
+          "returnType": {
+            "name": "Future",
+            "nullable": false,
+            "typeArguments": [
+              {
+                "name": "bool",
+                "nullable": false,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              }
+            ],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": false,
+            "isClass": true,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": false,
+          "private": false,
+          "static": false,
+          "parameters": [
+            {
+              "name": "useCase",
+              "type": {
+                "name": "UseCase",
+                "nullable": false,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": false,
+              "customValues": {}
+            }
+          ],
+          "customValues": {}
+        },
+        {
+          "name": "unbind",
+          "returnType": {
+            "name": "void",
+            "nullable": false,
+            "typeArguments": [],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": true,
+            "isClass": false,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": true,
+          "private": false,
+          "static": false,
+          "parameters": [
+            {
+              "name": "useCases",
+              "type": {
+                "name": "List",
+                "nullable": false,
+                "typeArguments": [
+                  {
+                    "name": "UseCase",
+                    "nullable": false,
+                    "typeArguments": [],
+                    "functionParameters": [],
+                    "functionReturnType": null,
+                    "isVoid": false,
+                    "isClass": true,
+                    "isFunction": false,
+                    "isEnum": false,
+                    "isSimpleClass": false,
+                    "isUnknownOrUnsupportedType": false,
+                    "customValues": {}
+                  }
+                ],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": false,
+              "customValues": {}
+            }
+          ],
+          "customValues": {}
+        },
+        {
+          "name": "unbindAll",
+          "returnType": {
+            "name": "void",
+            "nullable": false,
+            "typeArguments": [],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": true,
+            "isClass": false,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          },
+          "returnsVoid": true,
+          "private": false,
+          "static": false,
+          "parameters": [],
+          "customValues": {}
+        }
+      ],
+      "constructors": [
+        {
+          "name": "detached",
+          "private": false,
+          "parameters": [
+            {
+              "name": "binaryMessenger",
+              "type": {
+                "name": "BinaryMessenger",
+                "nullable": true,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": true,
+              "customValues": {}
+            },
+            {
+              "name": "instanceManager",
+              "type": {
+                "name": "InstanceManager",
+                "nullable": true,
+                "typeArguments": [],
+                "functionParameters": [],
+                "functionReturnType": null,
+                "isVoid": false,
+                "isClass": true,
+                "isFunction": false,
+                "isEnum": false,
+                "isSimpleClass": false,
+                "isUnknownOrUnsupportedType": false,
+                "customValues": {}
+              },
+              "isNamed": true,
+              "customValues": {}
+            }
+          ],
+          "customValues": {}
+        }
+      ],
+      "fields": [
+        {
+          "name": "_api",
+          "private": true,
+          "static": false,
+          "type": {
+            "name": "ProcessCameraProviderHostApiImpl",
+            "nullable": false,
+            "typeArguments": [],
+            "functionParameters": [],
+            "functionReturnType": null,
+            "isVoid": false,
+            "isClass": true,
+            "isFunction": false,
+            "isEnum": false,
+            "isSimpleClass": false,
+            "isUnknownOrUnsupportedType": false,
+            "customValues": {}
+          }
+        }
+      ],
+      "customValues": {}
+    }
+  ],
+  "functions": [],
+  "enums": [],
+  "customValues": {}
+}
